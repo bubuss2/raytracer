@@ -12,10 +12,10 @@ int main()
     // Render
     std::cout << "P3\n" << image_width << ' ' << image_height << "\n255\n";
 
-    for (std::size_t j = image_height - 1; j >= 0; --j)
+    for (int j = image_height - 1; j > -1; --j)
     {
         std::cerr << "\rScanlines remaining: " << j << ' ' << std::flush;
-        for (std::size_t i = 0; i < image_width; ++i)
+        for (int i = 0; i < image_width; ++i)
         {
             Vector3 pixel_color(double(i) / (image_width - 1), double(j) / (image_height - 1), 0.25);
             write_color(std::cout, pixel_color);
