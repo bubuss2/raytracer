@@ -7,71 +7,66 @@
 class Vector3
 {
   private:
-    double values[3]{};
+    double _values[3];
 
   public:
-    Vector3() : values{}
+    Vector3() : _values{0, 0, 0}
     {
     }
 
-    Vector3(double v0, double v1, double v2) : values{v0, v1, v2}
+    Vector3(double v0, double v1, double v2) : _values{v0, v1, v2}
     {
     }
 
     Vector3(const Vector3 &v)
     {
-        std::copy(v.values, v.values + 2, values);
+        std::copy(v._values, v._values + 2, _values);
     }
 
     double x() const
     {
-        return values[0];
+        return _values[0];
     }
 
     double y() const
     {
-        return values[1];
+        return _values[1];
     }
 
     double z() const
     {
-        return values[2];
+        return _values[2];
     }
 
     Vector3 operator-() const
     {
-        return Vector3(-values[0], -values[1], -values[2]);
+        return Vector3(-_values[0], -_values[1], -_values[2]);
     }
 
-    Vector3 operator-(const Vector3 &v)
+    double operator[](int i) const
     {
-        return *this + -v;
+        return _values[i];
     }
 
-    double operator[](std::size_t i) const
+    double &operator[](int i)
     {
-        return values[i];
-    }
-
-    double &operator[](std::size_t i)
-    {
-        return values[i];
+        return _values[i];
     }
 
     Vector3 &operator+=(const Vector3 &v)
     {
-        for (std::size_t i = 0; i < 3; i++)
+        for (int i = 0; i < 3; i++)
         {
-            values[i] += v.values[i];
+            _values[i] += v._values[i];
         }
         return *this;
     }
 
     Vector3 &operator*=(const double v)
     {
-        for (std::size_t i = 0; i < 3; i++)
+        for (int i = 0; i < 3; i++)
         {
-            values[i] *= v;
+            _values[i] *= v;
         }
         return *this;
     }
@@ -88,55 +83,43 @@ class Vector3
 
     double squared_sum() const
     {
-        return std::pow(values[0], 2) + std::pow(values[1], 2) + std::pow(values[2], 2);
-    }
-
-    Vector3 unit_vector() const
-    {
-        auto length = this->length();
-        return Vector3(values[0] / length, values[1] / length, values[2] / length);
+        return std::pow(_values[0], 2) + std::pow(_values[1], 2) + std::pow(_values[2], 2);
     }
 
     friend std::ostream &operator<<(std::ostream &out, const Vector3 &v);
-    friend double dot(const Vector3 &v0, const Vector3 &v1);
-    friend Vector3 cross(const Vector3 &v0, const Vector3 &v1);
+    friend Vector3 operator+(const Vector3 &u, const Vector3 &v);
+    friend Vector3 operator-(const Vector3 &u, const Vector3 &v);
+    friend Vector3 operator*(const Vector3 &u, const Vector3 &v);
     friend Vector3 operator*(double t, const Vector3 &v);
     friend Vector3 operator*(const Vector3 &v, double t);
-    friend Vector3 operator/(Vector3 v, double t);
-    friend Vector3 operator+(const Vector3 &v0, const Vector3 &v1);
-    friend Vector3 operator-(const Vector3 &v0, const Vector3 &v1);
+    friend Vector3 operator/(Vector3 &v, double t);
+    friend double dot(const Vector3 &u, const Vector3 &v);
+    friend Vector3 cross(const Vector3 &u, const Vector3 &v);
 };
 
 inline std::ostream &operator<<(std::ostream &out, const Vector3 &v)
 {
-    return out << v.values[0] << ' ' << v.values[1] << ' ' << v.values[2];
+    return out << v._values[0] << ' ' << v._values[1] << ' ' << v._values[2];
 }
 
-inline double dot(const Vector3 &v0, const Vector3 &v1)
+inline Vector3 operator+(const Vector3 &u, const Vector3 &v)
 {
-    return v0.values[0] * v1.values[0] + v0.values[1] * v1.values[1] + v0.values[2] * v1.values[2];
+    return Vector3(u._values[0] + v._values[0], u._values[1] + v._values[1], u._values[2] + v._values[2]);
 }
 
-inline Vector3 cross(const Vector3 &v0, const Vector3 &v1)
+inline Vector3 operator-(const Vector3 &u, const Vector3 &v)
 {
-    return Vector3(v0.values[1] * v1.values[2] - v0.values[2] * v1.values[1],
-                   v0.values[2] * v1.values[0] - v0.values[0] * v1.values[2],
-                   v0.values[0] * v1.values[1] - v0.values[1] * v1.values[0]);
+    return Vector3(u._values[0] - v._values[0], u._values[1] - v._values[1], u._values[2] - v._values[2]);
 }
 
-inline Vector3 operator+(const Vector3 &v0, const Vector3 &v1)
+inline Vector3 operator*(const Vector3 &u, const Vector3 &v)
 {
-    return Vector3(v0.values[0] + v1.values[0], v0.values[1] + v1.values[1], v0.values[2] + v1.values[2]);
-}
-
-inline Vector3 operator-(const Vector3 &v0, const Vector3 &v1)
-{
-    return Vector3(v0.values[0] - v1.values[0], v0.values[1] - v1.values[1], v0.values[2] - v1.values[2]);
+    return Vector3(u._values[0] * v._values[0], u._values[1] * v._values[1], u._values[2] * v._values[2]);
 }
 
 inline Vector3 operator*(double t, const Vector3 &v)
 {
-    return Vector3(t * v.values[0], t * v.values[1], t * v.values[2]);
+    return Vector3(t * v._values[0], t * v._values[1], t * v._values[2]);
 }
 
 inline Vector3 operator*(const Vector3 &v, double t)
@@ -144,9 +127,26 @@ inline Vector3 operator*(const Vector3 &v, double t)
     return t * v;
 }
 
-inline Vector3 operator/(Vector3 v, double t)
+inline Vector3 operator/(Vector3 &v, double t)
 {
     return (1 / t) * v;
+}
+
+inline double dot(const Vector3 &u, const Vector3 &v)
+{
+    return u._values[0] * v._values[0] + u._values[1] * v._values[1] + u._values[2] * v._values[2];
+}
+
+inline Vector3 cross(const Vector3 &u, const Vector3 &v)
+{
+    return Vector3(u._values[1] * v._values[2] - u._values[2] * v._values[1],
+                   u._values[2] * v._values[0] - u._values[0] * v._values[2],
+                   u._values[0] * v._values[1] - u._values[1] * v._values[0]);
+}
+
+inline Vector3 unit_vector(Vector3 v)
+{
+    return v / v.length();
 }
 
 #endif

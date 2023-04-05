@@ -6,7 +6,7 @@
 
 Vector3 ray_color(const Ray &r)
 {
-    Vector3 unit_direction = r.get_direction().unit_vector();
+    Vector3 unit_direction = unit_vector(r.get_direction());
     auto t = 0.5 * (unit_direction.y() + 1.0);
     return (1.0 - t) * Vector3(1.0, 1.0, 1.0) + t * Vector3(0.5, 0.7, 1.0);
 }

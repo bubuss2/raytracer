@@ -1,7 +1,9 @@
-#ifndef COLOR_HPP
-#define COLOR_HPP
+#ifndef COLOR_H
+#define COLOR_H
 
 #include "vector3.hpp"
+
+#include <iostream>
 
 void write_color(std::ostream &out, Vector3 pixel_color)
 {
