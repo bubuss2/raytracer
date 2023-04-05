@@ -7,22 +7,22 @@
 class Sphere : public Surface
 {
   private:
-    Vector3 center;
-    double radius;
+    Vector3 _center;
+    double _radius;
 
   public:
     Sphere()
     {
     }
 
-    Sphere(Vector3 cen, double r) : center(cen), radius(r){};
+    Sphere(Vector3 cen, double r) : _center(cen), _radius(r){};
 
     virtual bool hit(const Ray &r, double t_min, double t_max, HitRecord &rec) const
     {
-        Vector3 oc = r.get_origin() - center;
+        Vector3 oc = r.get_origin() - _center;
         auto a = r.get_direction().squared_sum();
         auto half_b = dot(oc, r.get_direction());
-        auto c = oc.squared_sum() - radius * radius;
+        auto c = oc.squared_sum() - _radius * _radius;
 
         auto discriminant = half_b * half_b - a * c;
         if (discriminant < 0)
@@ -40,7 +40,7 @@ class Sphere : public Surface
 
         rec.t = root;
         rec.p = r.at(rec.t);
-        Vector3 outward_normal = (rec.p - center) / radius;
+        Vector3 outward_normal = (rec.p - _center) / _radius;
         rec.set_face_normal(r, outward_normal);
 
         return true;
