@@ -9,7 +9,7 @@
 class SurfaceList : public Surface
 {
   private:
-    std::vector<std::shared_ptr<Surface>> objects;
+    std::vector<std::shared_ptr<Surface>> _objects;
 
   public:
     SurfaceList()
@@ -22,12 +22,12 @@ class SurfaceList : public Surface
 
     void clear()
     {
-        objects.clear();
+        _objects.clear();
     }
 
     void add(std::shared_ptr<Surface> object)
     {
-        objects.push_back(object);
+        _objects.push_back(object);
     }
 
     virtual bool hit(const Ray &r, double t_min, double t_max, HitRecord &rec) const
@@ -36,7 +36,7 @@ class SurfaceList : public Surface
         bool hit_anything = false;
         auto closest_so_far = t_max;
 
-        for (const auto &object : objects)
+        for (const auto &object : _objects)
         {
             if (object->hit(r, t_min, closest_so_far, temp_rec))
             {
