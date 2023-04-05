@@ -4,25 +4,29 @@
 
 #include <iostream>
 
-bool hit_sphere(const Vector3 &center, double radius, const Ray &r)
+double hit_sphere(const Vector3 &center, double radius, const Ray &r)
 {
     Vector3 oc = r.get_origin() - center;
-    auto a = dot(r.get_direction(), r.get_direction());
-    auto b = 2.0 * dot(oc, r.get_direction());
-    auto c = dot(oc, oc) - radius * radius;
-    auto discriminant = b * b - 4 * a * c;
-    return (discriminant > 0);
+    auto a = r.get_direction().squared_sum();
+    auto half_b = dot(oc, r.get_direction());
+    auto c = oc.squared_sum() - radius * radius;
+    auto discriminant = half_b * half_b - a * c;
+
+    return (discriminant < 0) ? -1.0 : (-half_b - sqrt(discriminant)) / a;
 }
 
 Vector3 ray_color(const Ray &r)
 {
-    if (hit_sphere(Vector3(0, 0, -1), 0.5, r))
+    auto t = hit_sphere(Vector3(0, 0, -1), 0.5, r);
+
+    if (t > 0.0)
     {
-        return Vector3(1, 0, 0);
+        Vector3 N = unit_vector(r.at(t) - Vector3(0, 0, -1));
+        return 0.5 * Vector3(N.x() + 1, N.y() + 1, N.z() + 1);
     }
 
     Vector3 unit_direction = unit_vector(r.get_direction());
-    auto t = 0.5 * (unit_direction.y() + 1.0);
+    t = 0.5 * (unit_direction.y() + 1.0);
     return (1.0 - t) * Vector3(1.0, 1.0, 1.0) + t * Vector3(0.5, 0.7, 1.0);
 }
 
