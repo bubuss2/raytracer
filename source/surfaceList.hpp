@@ -11,6 +11,9 @@ using std::shared_ptr;
 
 class SurfaceList : public Surface
 {
+  private:
+    std::vector<shared_ptr<Surface>> objects;
+
   public:
     SurfaceList()
     {
@@ -48,9 +51,6 @@ class SurfaceList : public Surface
 
         return hit_anything;
     }
-
-  public:
-    std::vector<shared_ptr<Surface>> objects;
 };
 
 #endif
