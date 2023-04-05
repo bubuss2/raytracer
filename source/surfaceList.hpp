@@ -6,19 +6,16 @@
 #include <memory>
 #include <vector>
 
-using std::make_shared;
-using std::shared_ptr;
-
 class SurfaceList : public Surface
 {
   private:
-    std::vector<shared_ptr<Surface>> objects;
+    std::vector<std::shared_ptr<Surface>> objects;
 
   public:
     SurfaceList()
     {
     }
-    SurfaceList(shared_ptr<Surface> object)
+    SurfaceList(std::shared_ptr<Surface> object)
     {
         add(object);
     }
@@ -28,7 +25,7 @@ class SurfaceList : public Surface
         objects.clear();
     }
 
-    void add(shared_ptr<Surface> object)
+    void add(std::shared_ptr<Surface> object)
     {
         objects.push_back(object);
     }
