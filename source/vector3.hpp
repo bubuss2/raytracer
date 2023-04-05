@@ -18,11 +18,6 @@ class Vector3
     {
     }
 
-    Vector3(const Vector3 &v)
-    {
-        std::copy(v._values, v._values + 2, _values);
-    }
-
     double x() const
     {
         return _values[0];
