@@ -9,13 +9,15 @@ class Sphere : public Surface
   private:
     Point _center;
     double _radius;
+    std::shared_ptr<Material> _material;
 
   public:
     Sphere()
     {
     }
 
-    Sphere(Point center, double radius) : _center(center), _radius(radius){};
+    Sphere(Point center, double radius, std::shared_ptr<Material> material)
+        : _center(center), _radius(radius), _material(material){};
 
     virtual bool hit(const Ray &r, double t_min, double t_max, HitRecord &rec) const
     {
@@ -42,6 +44,7 @@ class Sphere : public Surface
         rec.p = r.at(rec.t);
         Vector3 outward_normal = (rec.p - _center) / _radius;
         rec.set_face_normal(r, outward_normal);
+        rec.material = _material;
 
         return true;
     };
