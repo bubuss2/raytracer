@@ -1,7 +1,7 @@
-#ifndef RAY_H
-#define RAY_H
+#ifndef RAY_HPP
+#define RAY_HPP
 
-#include "common.hpp"
+#include "vector3.hpp"
 
 class Ray
 {
@@ -14,7 +14,7 @@ class Ray
     {
     }
 
-    Ray(const Vector3 &origin, const Vector3 &direction) : _origin(origin), _direction(direction)
+    Ray(const Point &origin, const Vector3 &direction) : _origin(origin), _direction(direction)
     {
     }
 

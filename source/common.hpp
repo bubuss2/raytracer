@@ -25,6 +25,21 @@ inline double random_double(double start = 0.0, double end = 1.0)
     return distribution(generator);
 }
 
+inline double clamp(double x, double min, double max)
+{
+    if (x < min)
+    {
+        return min;
+    }
+
+    if (x > max)
+    {
+        return max;
+    }
+
+    return x;
+}
+
 // Common Headers
 
 #include "ray.hpp"
