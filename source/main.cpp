@@ -1,12 +1,10 @@
 #include "color.hpp"
 #include "common.hpp"
+#include "ray.hpp"
 #include "sphere.hpp"
 #include "surfaceList.hpp"
 
 #include <iostream>
-
-typedef Vector3 Color;
-typedef Vector3 Point;
 
 Color ray_color(const Ray &r, const Surface &world)
 {

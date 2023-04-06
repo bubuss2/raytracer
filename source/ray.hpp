@@ -1,12 +1,12 @@
 #ifndef RAY_H
 #define RAY_H
 
-#include "vector3.hpp"
+#include "common.hpp"
 
 class Ray
 {
   private:
-    Vector3 _origin;
+    Point _origin;
     Vector3 _direction;
 
   public:

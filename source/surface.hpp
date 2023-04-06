@@ -5,7 +5,7 @@
 
 struct HitRecord
 {
-    Vector3 p;
+    Point p;
     Vector3 normal;
     double t;
     bool front_face;

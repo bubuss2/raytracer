@@ -132,4 +132,9 @@ inline Vector3 unit_vector(Vector3 v)
     return v / v.length();
 }
 
+// Typedefs
+
+typedef Vector3 Color;
+typedef Vector3 Point;
+
 #endif

@@ -7,7 +7,7 @@
 class Sphere : public Surface
 {
   private:
-    Vector3 _center;
+    Point _center;
     double _radius;
 
   public:
@@ -15,7 +15,7 @@ class Sphere : public Surface
     {
     }
 
-    Sphere(Vector3 cen, double r) : _center(cen), _radius(r){};
+    Sphere(Point center, double radius) : _center(center), _radius(radius){};
 
     virtual bool hit(const Ray &r, double t_min, double t_max, HitRecord &rec) const
     {
