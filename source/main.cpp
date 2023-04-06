@@ -5,17 +5,20 @@
 
 #include <iostream>
 
-Vector3 ray_color(const Ray &r, const Surface &world)
+typedef Vector3 Color;
+typedef Vector3 Point;
+
+Color ray_color(const Ray &r, const Surface &world)
 {
     HitRecord rec;
     if (world.hit(r, 0, infinity, rec))
     {
-        return 0.5 * (rec.normal + Vector3(1, 1, 1));
+        return 0.5 * (rec.normal + Color(1, 1, 1));
     }
 
     Vector3 unit_direction = unit_vector(r.get_direction());
     auto t = 0.5 * (unit_direction.y() + 1.0);
-    return (1.0 - t) * Vector3(1.0, 1.0, 1.0) + t * Vector3(0.5, 0.7, 1.0);
+    return (1.0 - t) * Color(1.0, 1.0, 1.0) + t * Color(0.5, 0.7, 1.0);
 }
 
 int main()
@@ -23,13 +26,13 @@ int main()
 
     // Image
     const auto aspect_ratio = 16.0 / 9.0;
-    const int image_width = 400;
+    const int image_width = 1920;
     const int image_height = static_cast<int>(image_width / aspect_ratio);
 
     // World
     SurfaceList world;
-    world.add(std::make_shared<Sphere>(Vector3(0, 0, -1), 0.5));
-    world.add(std::make_shared<Sphere>(Vector3(0, -100.5, -1), 100));
+    world.add(std::make_shared<Sphere>(Point(0, 0, -1), 0.5));
+    world.add(std::make_shared<Sphere>(Point(0, -100.5, -1), 100));
 
     // Camera
 
@@ -37,7 +40,7 @@ int main()
     auto viewport_width = aspect_ratio * viewport_height;
     auto focal_length = 1.0;
 
-    auto origin = Vector3(0, 0, 0);
+    auto origin = Point(0, 0, 0);
     auto horizontal = Vector3(viewport_width, 0, 0);
     auto vertical = Vector3(0, viewport_height, 0);
     auto lower_left_corner = origin - horizontal / 2 - vertical / 2 - Vector3(0, 0, focal_length);
@@ -54,7 +57,7 @@ int main()
             auto u = double(i) / (image_width - 1);
             auto v = double(j) / (image_height - 1);
             Ray r(origin, lower_left_corner + u * horizontal + v * vertical - origin);
-            Vector3 pixel_color = ray_color(r, world);
+            Color pixel_color = ray_color(r, world);
             write_color(std::cout, pixel_color);
         }
     }
