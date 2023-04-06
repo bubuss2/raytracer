@@ -82,6 +82,13 @@ class Vector3
         return std::pow(x(), 2) + std::pow(y(), 2) + std::pow(z(), 2);
     }
 
+    bool near_zero() const
+    {
+        // Return true if the vector is close to zero in all dimensions.
+        const auto s = 1e-8;
+        return (fabs(x()) < s) && (fabs(y()) < s) && (fabs(z()) < s);
+    }
+
     inline static Vector3 random()
     {
         return Vector3(random_double(), random_double(), random_double());
