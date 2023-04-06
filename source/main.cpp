@@ -19,7 +19,7 @@ Color ray_color(const Ray &r, const Surface &world, int depth)
 
     if (world.hit(r, 0.001, infinity, rec))
     {
-        Point target = rec.p + random_in_hemisphere(rec.normal);
+        Point target = rec.p + rec.normal + random_unit_vector();
         return 0.5 * ray_color(Ray(rec.p, target - rec.p), world, depth - 1);
     }
 
