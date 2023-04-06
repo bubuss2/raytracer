@@ -165,6 +165,11 @@ inline Vector3 random_unit_vector()
     return unit_vector(Vector3::random_in_unit_sphere());
 }
 
+inline Vector3 reflect(const Vector3 &v, const Vector3 &n)
+{
+    return v - 2 * dot(v, n) * n;
+}
+
 // Typedefs
 
 typedef Vector3 Color;
