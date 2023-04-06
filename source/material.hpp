@@ -2,8 +2,7 @@
 #define MATERIAL_HPP
 
 #include "common.hpp"
-
-class HitRecord;
+#include "hitRecord.hpp"
 
 class Material
 {
