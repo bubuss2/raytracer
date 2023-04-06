@@ -17,7 +17,7 @@ Color ray_color(const Ray &r, const Surface &world, int depth)
 
     HitRecord rec;
 
-    if (world.hit(r, 0, infinity, rec))
+    if (world.hit(r, 0.001, infinity, rec))
     {
         Point target = rec.p + rec.normal + Vector3::random_in_unit_sphere();
         return 0.5 * ray_color(Ray(rec.p, target - rec.p), world, depth - 1);
