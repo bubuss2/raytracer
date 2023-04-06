@@ -48,6 +48,7 @@ int main()
 
     // World
     SurfaceList world;
+
     auto material_ground = std::make_shared<Lambertian>(Color(0.8, 0.8, 0.0));
     auto material_center = std::make_shared<Lambertian>(Color(0.1, 0.2, 0.5));
     auto material_left = std::make_shared<Dielectric>(1.5);
@@ -56,20 +57,11 @@ int main()
     world.add(std::make_shared<Sphere>(Point(0.0, -100.5, -1.0), 100.0, material_ground));
     world.add(std::make_shared<Sphere>(Point(0.0, 0.0, -1.0), 0.5, material_center));
     world.add(std::make_shared<Sphere>(Point(-1.0, 0.0, -1.0), 0.5, material_left));
-    world.add(std::make_shared<Sphere>(Point(-1.0, 0.0, -1.0), -0.4, material_left));
+    world.add(std::make_shared<Sphere>(Point(-1.0, 0.0, -1.0), -0.45, material_left));
     world.add(std::make_shared<Sphere>(Point(1.0, 0.0, -1.0), 0.5, material_right));
 
     // Camera
-    Camera camera;
-
-    auto viewport_height = 2.0;
-    auto viewport_width = aspect_ratio * viewport_height;
-    auto focal_length = 1.0;
-
-    auto origin = Point(0, 0, 0);
-    auto horizontal = Vector3(viewport_width, 0, 0);
-    auto vertical = Vector3(0, viewport_height, 0);
-    auto lower_left_corner = origin - horizontal / 2 - vertical / 2 - Vector3(0, 0, focal_length);
+    Camera camera(Point(-2, 2, 1), Point(0, 0, -1), Vector3(0, 1, 0), 30, aspect_ratio);
 
     // Render
 
