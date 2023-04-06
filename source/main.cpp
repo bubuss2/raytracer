@@ -1,6 +1,8 @@
 #include "camera.hpp"
 #include "color.hpp"
 #include "common.hpp"
+#include "lambertian.hpp"
+#include "metal.hpp"
 #include "ray.hpp"
 #include "sphere.hpp"
 #include "surfaceList.hpp"
@@ -19,8 +21,14 @@ Color ray_color(const Ray &r, const Surface &world, int depth)
 
     if (world.hit(r, 0.001, infinity, rec))
     {
-        Point target = rec.p + rec.normal + random_unit_vector();
-        return 0.5 * ray_color(Ray(rec.p, target - rec.p), world, depth - 1);
+        Ray scattered;
+        Color attenuation;
+        if (rec.material->scatter(r, rec, attenuation, scattered))
+        {
+            return attenuation * ray_color(scattered, world, depth - 1);
+        }
+
+        return Color(0, 0, 0);
     }
 
     Vector3 unit_direction = unit_vector(r.get_direction());
@@ -30,18 +38,24 @@ Color ray_color(const Ray &r, const Surface &world, int depth)
 
 int main()
 {
-
     // Image
     const auto aspect_ratio = 16.0 / 9.0;
-    const int image_width = 500;
+    const int image_width = 1920;
     const int image_height = static_cast<int>(image_width / aspect_ratio);
     const int samples_per_pixel = 100;
     const int max_depth = 50;
 
     // World
     SurfaceList world;
-    world.add(std::make_shared<Sphere>(Point(0, 0, -1), 0.5));
-    world.add(std::make_shared<Sphere>(Point(0, -100.5, -1), 100));
+    auto material_ground = std::make_shared<Lambertian>(Color(0.8, 0.8, 0.0));
+    auto material_center = std::make_shared<Lambertian>(Color(0.7, 0.3, 0.3));
+    auto material_left = std::make_shared<Metal>(Color(0.8, 0.8, 0.8));
+    auto material_right = std::make_shared<Metal>(Color(0.8, 0.6, 0.2));
+
+    world.add(std::make_shared<Sphere>(Point(0.0, -100.5, -1.0), 100.0, material_ground));
+    world.add(std::make_shared<Sphere>(Point(0.0, 0.0, -1.0), 0.5, material_center));
+    world.add(std::make_shared<Sphere>(Point(-1.0, 0.0, -1.0), 0.5, material_left));
+    world.add(std::make_shared<Sphere>(Point(1.0, 0.0, -1.0), 0.5, material_right));
 
     // Camera
     Camera camera;
