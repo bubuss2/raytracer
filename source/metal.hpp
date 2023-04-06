@@ -11,7 +11,7 @@ class Metal : public Material
     double _fuzz;
 
   public:
-    Metal(const Color &albedo, double fuzz) : _albedo(albedo), _fuzz(fuzz < 1 ? f : 1)
+    Metal(const Color &albedo, double fuzz) : _albedo(albedo), _fuzz(fuzz < 1 ? fuzz : 1)
     {
     }
 
