@@ -1,6 +1,7 @@
 #ifndef VECTOR3_HPP
 #define VECTOR3_HPP
 
+#include "common.hpp"
 #include <cmath>
 #include <iostream>
 
@@ -79,6 +80,26 @@ class Vector3
     double squared_sum() const
     {
         return std::pow(x(), 2) + std::pow(y(), 2) + std::pow(z(), 2);
+    }
+
+    inline static Vector3 random()
+    {
+        return Vector3(random_double(), random_double(), random_double());
+    }
+
+    inline static Vector3 random(double min, double max)
+    {
+        return Vector3(random_double(min, max), random_double(min, max), random_double(min, max));
+    }
+
+    inline static Vector3 random_in_unit_sphere()
+    {
+        auto p = Vector3(infinity, infinity, infinity);
+        while (p.squared_sum() >= 1)
+        {
+            p = Vector3::random(-1, 1);
+        }
+        return p;
     }
 };
 
