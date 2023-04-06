@@ -178,6 +178,16 @@ inline Vector3 refract(const Vector3 &uv, const Vector3 &n, double etai_over_eta
     return r_out_perp + r_out_parallel;
 }
 
+inline Vector3 random_in_unit_disk()
+{
+    auto p = Vector3(infinity, infinity, infinity);
+    while (p.squared_sum() >= 1)
+    {
+        p = Vector3(random_double(-1, 1), random_double(-1, 1), 0);
+    }
+    return p;
+}
+
 // Typedefs
 
 typedef Vector3 Color;
