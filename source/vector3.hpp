@@ -153,6 +153,19 @@ inline Vector3 unit_vector(Vector3 v)
     return v / v.length();
 }
 
+inline Vector3 random_in_hemisphere(const Vector3 &normal)
+{
+    Vector3 in_unit_sphere = Vector3::random_in_unit_sphere();
+    if (dot(in_unit_sphere, normal) > 0.0)
+    {
+        return in_unit_sphere; // In the same hemisphere as the normal
+    }
+    else
+    {
+        return -in_unit_sphere;
+    }
+}
+
 // Typedefs
 
 typedef Vector3 Color;
