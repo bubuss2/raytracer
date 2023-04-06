@@ -6,28 +6,32 @@
 class Camera
 {
   private:
-    Point origin;
-    Point lower_left_corner;
-    Vector3 horizontal;
-    Vector3 vertical;
+    Point _origin;
+    Point _lower_left_corner;
+    Vector3 _horizontal;
+    Vector3 _vertical;
 
   public:
-    Camera()
+    Camera(Point viewSource, Point viewTarget, Vector3 viewUp, double field_of_view, double aspect_ratio)
     {
-        auto aspect_ratio = 16.0 / 9.0;
-        auto viewport_height = 2.0;
+        auto theta = degrees_to_radians(field_of_view);
+        auto h = tan(theta / 2);
+        auto viewport_height = 2.0 * h;
         auto viewport_width = aspect_ratio * viewport_height;
-        auto focal_length = 1.0;
 
-        origin = Point(0, 0, 0);
-        horizontal = Vector3(viewport_width, 0.0, 0.0);
-        vertical = Vector3(0.0, viewport_height, 0.0);
-        lower_left_corner = origin - horizontal / 2 - vertical / 2 - Vector3(0, 0, focal_length);
+        auto w = unit_vector(viewSource - viewTarget);
+        auto u = unit_vector(cross(viewUp, w));
+        auto v = cross(w, u);
+
+        _origin = viewSource;
+        _horizontal = viewport_width * u;
+        _vertical = viewport_height * v;
+        _lower_left_corner = _origin - _horizontal / 2 - _vertical / 2 - w;
     }
 
-    Ray get_ray(double u, double v) const
+    Ray get_ray(double s, double t) const
     {
-        return Ray(origin, lower_left_corner + u * horizontal + v * vertical - origin);
+        return Ray(_origin, _lower_left_corner + s * _horizontal + t * _vertical - _origin);
     }
 };
 #endif
