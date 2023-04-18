@@ -3,6 +3,6 @@ project(raytracer LANGUAGES CXX CUDA)
 
 include_directories(source/CPU)
 include_directories(source/GPU)
-add_executable(raytracer source/GPU/main.cu)
+add_executable(raytracer source/main.cpp)
 
-target_compile_features(raytracer PUBLIC cxx_std_17)
+target_compile_features(raytracer PUBLIC cxx_std_20)

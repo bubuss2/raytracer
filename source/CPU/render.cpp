@@ -54,13 +54,13 @@ SurfaceList random_scene()
     }
 
     auto material1 = std::make_shared<Dielectric>(1.5);
-    world.add(std::make_shared<Sphere>(Point(0, 0.5, 0), 1.0, material1));
+    world.add(std::make_shared<Sphere>(Point(0, 0, 0), 1.0, material1));
 
     auto material2 = std::make_shared<Lambertian>(Color(0.4, 0.2, 0.1));
-    world.add(std::make_shared<Sphere>(Point(-4, 1, 0), 1.0, material2));
+    world.add(std::make_shared<Sphere>(Point(-4, 0, 0), 1.0, material2));
 
     auto material3 = std::make_shared<Metal>(Color(0.3, 0.6, 0.5), 0.0);
-    world.add(std::make_shared<Sphere>(Point(4, 1.5, 0), 1.0, material3));
+    world.add(std::make_shared<Sphere>(Point(4, 0, 0), 1.0, material3));
 
     return world;
 }
@@ -92,15 +92,9 @@ Color ray_color(const Ray &r, const Surface &world, int depth)
     return (1.0 - t) * Color(1.0, 1.0, 1.0) + t * Color(0.5, 0.7, 1.0);
 }
 
-int main()
+void render_image(std::ofstream &outFile, const int image_width, const int image_height, const double aspect_ratio,
+                  const int samples_per_pixel, const int max_ray_depth)
 {
-    // Image
-    const auto aspect_ratio = 3.0 / 2.0;
-    const int image_width = 400;
-    const int image_height = static_cast<int>(image_width / aspect_ratio);
-    const int samples_per_pixel = 20;
-    const int max_depth = 10;
-
     // World
     auto world = random_scene();
 
@@ -113,12 +107,11 @@ int main()
     Camera camera(viewSource, viewTarget, viewUp, 20, aspect_ratio, aperture, dist_to_focus);
 
     // Render
-
-    std::cout << "P3\n" << image_width << " " << image_height << "\n255\n";
+    outFile << "P3\n" << image_width << " " << image_height << "\n255\n";
 
     for (int j = image_height - 1; j >= 0; --j)
     {
-        std::cerr << "\rScanlines remaining: " << j << ' ' << std::flush;
+        std::cout << "\rScanlines remaining: " << j << ' ' << std::flush;
         for (int i = 0; i < image_width; ++i)
         {
             Color pixel_Color(0, 0, 0);
@@ -127,11 +120,11 @@ int main()
                 auto u = (i + random_double()) / (image_width - 1);
                 auto v = (j + random_double()) / (image_height - 1);
                 Ray r = camera.get_ray(u, v);
-                pixel_Color += ray_color(r, world, max_depth);
+                pixel_Color += ray_color(r, world, max_ray_depth);
             }
-            write_color(std::cout, pixel_Color, samples_per_pixel);
+            write_color(outFile, pixel_Color, samples_per_pixel);
         }
     }
 
-    std::cerr << "\nDone.\n";
+    std::cout << "\nDone.\n";
 }
